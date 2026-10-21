@@ -6,8 +6,6 @@ Python 3.10 or newer. No account and no key are needed to prove the detectors or
 
 Use `python3` (3.10 or newer). PyPI does not host this package. `pip install honeyprompts` fails. Make a virtualenv, then run the block below. It fetches `/dl/latest.json`, downloads the wheel that file names, and checks sha256 with hashlib against that file and against `PINNED_SHA256`. A redirect whose target is not `https://www.honeyprompter.com` on port 443 (another host, another port, or http) is an error. It then installs `./<wheel>` with `--no-deps`. Do not pip-install the URL.
 
-Maintainers bump `PINNED_SHA256` with `python scripts/build_dist.py --pin-skill`. That hashes the wheel already published under `dashboard/public/dl/`, writes the pin, and rebuilds the skill zip. It does not rebuild the wheel. Do not edit the pin by hand.
-
 ```bash
 python3 -m venv .hp && . .hp/bin/activate
 ```
@@ -80,7 +78,7 @@ Read the text report in this order: `headline`, `by_category`, `known_gaps`, `co
 
 `--json` is the same run in another shape. `result` is the lowercase string `pass` or `fail`. Under `summary`: the counts, `missed_ids`, `unexpected_ids`, `known_gap_ids`, and `control_ids`. Top-level `attacks` is a list of 55 rows, not a number. The count is `summary.attacks`. A masked `<id>` stands in for a decoy and is the same on every run. A short excerpt from a real SDK 1.0.21 JSON run is in `references/selftest-sample.md`, next to the text capture (46 caught of 55, `unexpected` 0). If a live run differs in `caught`, `rule`, or `meaning`, trust the live run.
 
-`honeyprompt init --local`, `honeyprompt test`, and `honeyprompt dashboard` are separate. `test` without a console runs one leak on this machine and saves a receipt. `test` with a console asks before it sends. Neither is required for `selftest`.
+`honeyprompt init --local` and `honeyprompt test` are separate. `test` without a console runs one leak on this machine and saves a receipt. `test` with a console asks before it sends. Neither is required for `selftest`.
 
 ## Zero-code OpenAI protection
 
@@ -160,16 +158,8 @@ def test_a_leaked_decoy_is_blocked_and_leaves_a_receipt():
 
 This runs offline in demo mode. To test your real agent, point the stand-in at the same code path your agent uses.
 
-## What a match covers
+## Forms a match finds
 
 The value as written, in another case, with invisible characters or look-alike Unicode, split by spaces or punctuation, reversed, ROT13, base64, hex or URL-encoded. The receipt says how it matched.
 
-## Connect a machine to a console (optional)
-
-Console → Machines → **Create command**, then paste it on the machine:
-
-```bash
-curl -fsSL https://www.honeyprompter.com/install.sh | sh -s -- --enroll hpe_XXXXXXXXXXXXXXXXXXXXXXXXXXX --name my-server --checksum fbd706c6b89b3c86716154610ad5adc6117033bee9e51c60d92fb20bdbd66daa
-```
-
-The code works once and expires in 24 hours. The machine gets its own key; **Disconnect** in the console cuts that machine off. Only outbound HTTPS is used.
+Anything beyond this local check is at https://honeyprompter.com.

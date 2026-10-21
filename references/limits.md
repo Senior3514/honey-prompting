@@ -21,10 +21,10 @@ Least privilege for the agent's tools and credentials, input and output filterin
 
 ## Wording for the final note
 
-> Covered: [tripwires and where they are]. Detects: [leak of the decoy in these forms; a read of the canary file; request to the canary URL]. Blocks: [the reply that contains a decoy]. Does not cover: [paraphrased leaks, harm without a secret, anything outside these tripwires]. To re-check: run `honeyprompt selftest` and the tripwire tests in the suite.
+> Tripwires: [tripwires and where they are]. Detects: [leak of the decoy in these forms; a read of the canary file; request to the canary URL]. Blocks (only with protect() or a guard): [the reply that contains a decoy]; otherwise Blocks: nothing, detect only. Does not detect: [paraphrased leaks, harm without a secret, anything outside these tripwires]. To re-check: run `honeyprompt selftest` and the tripwire tests in the suite.
 
 Never write "secure", "safe", "protected from prompt injection" or "prevents".
 
 ## Related work (do not claim to have invented it)
 
-The underlying idea, canary and honeytoken style tripwires, is older than LLMs. Related public work includes the USENIX Security 2025 paper "Cloak, Honey, Trap: Proactive Defenses Against LLM Agents", WunderGraph's honeypot functions, and Thinkst Canarytokens. Say what this skill adds (decoys and canaries feeding one evidence trail with alerts), not that it is the first.
+The underlying idea, canary and honeytoken style tripwires, is older than LLMs. Related public work includes the USENIX Security 2025 paper "Cloak, Honey, Trap: Proactive Defenses Against LLM Agents", WunderGraph's honeypot functions, and Thinkst Canarytokens. Say what this skill adds (decoys and canaries planted for you, plus an offline self-test that shows what the detectors catch), not that it is the first.

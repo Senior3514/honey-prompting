@@ -11,8 +11,9 @@ Python. In Python with an OpenAI-style client, prefer `pip install` of the honey
 Decoys look like secrets but authenticate nowhere. Keep the decoys file private: a decoy an
 attacker knows is a decoy they can avoid.
 
-What the scan catches: the value as written, in another case, split by spaces or punctuation,
-reversed, ROT13, base64, hex or URL-encoded, and any contiguous run of at least 12 characters
+What the scan catches: the value as written, in another case, split by spaces, punctuation or
+invisible characters, in full-width or other NFKC look-alike Unicode, reversed, ROT13, base64,
+hex or URL-encoded, and any contiguous run of at least 12 characters
 from the value (including that run in base64, hex, or URL-encoding). What it cannot catch: a
 paraphrase, a translation, a value spelled out in words, or a piece shorter than 12 characters.
 A tripwire detects; it is not a data-loss-prevention engine.
@@ -76,6 +77,8 @@ def _b64_decode(run: str) -> str | None:
 def _variants(text: str):
     yield "literal", text
     norm = _norm(text)
+    if norm != text:
+        yield "unicode", norm
     yield "reversed", norm[::-1]
     yield "rot13", codecs.encode(norm, "rot13")
     unq = unquote(norm)
@@ -169,6 +172,8 @@ def _selftest() -> int:
         "url": "".join(f"%{ord(c):02X}" for c in v),
         "fragment": f"prefix {v[:12]} only",
         "fragment-b64": base64.b64encode(v[:16].encode()).decode(),
+        "zero-width-split": "\u200b".join(v),
+        "full-width": "".join(chr(ord(c) + 0xFEE0) if 0x21 <= ord(c) <= 0x7E else c for c in v),
     }
     bad = []
     for name, text in cases.items():

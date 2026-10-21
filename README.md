@@ -1,12 +1,14 @@
 # Honey Prompting: a Claude skill
 
-Version 1.2.2. Web page: https://honeyprompter.com/skill
+Version 1.2.3. Web page: https://honeyprompter.com/skill
 
 Honey Prompting teaches Claude to plant decoys (fake, inert secrets) and canaries (hidden instructions with a unique token) where an AI agent can see them, then run an offline self-test and report what was caught. Use it for chatbots, RAG pipelines, MCP servers, coding agents and other tool-using assistants that read untrusted text.
 
 **It detects. It does not prevent.** A decoy that leaks, or a canary that gets obeyed, is evidence that a leak path exists. A quiet result is not proof of safety, and this skill does not replace least privilege, filtering, or human approval of sensitive actions. See `references/limits.md` for what it cannot catch.
 
 No account and no API key are needed. The self-test calls no model and sends nothing. Connecting a HoneyPrompter console is optional.
+
+Anything beyond this local check is at https://honeyprompter.com.
 
 ## Install
 

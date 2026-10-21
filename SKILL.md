@@ -1,11 +1,11 @@
 ---
 name: honey-prompting
-description: Trigger this skill when the user wants to know whether an AI agent leaked a secret or obeyed a hidden instruction. Use it for prompt injection, indirect injection, a decoy, a canary, a honeytoken, a honey prompt, or a tripwire on a chatbot, a RAG pipeline, an MCP server, a coding agent, or a tool-using assistant. Also use it when they only describe the worry (the agent reads untrusted pages, tickets, or email while it holds credentials) or they say honey prompt, HoneyPrompter, or protect my agent. Work standalone. Plant decoys, run honeyprompt selftest, and show what was caught. No console and no API key are required. The self-test sends nothing. Connect to the HoneyPrompter console only if they ask, and only as the last step. Do not use it to plant a real secret, or to claim an attack was stopped.
+description: Trigger this skill when the user wants to know whether an AI agent leaked a secret or obeyed a hidden instruction. Use it for prompt injection, indirect injection, a decoy, a canary, a honeytoken, a honey prompt, or a tripwire on a chatbot, a RAG pipeline, an MCP server, a coding agent, or a tool-using assistant. Also use it when they only describe the worry (the agent reads untrusted pages, tickets, or email while it holds credentials) or they say honey prompt, HoneyPrompter, or protect my agent. Work standalone. Plant decoys, run honeyprompt selftest, and show what was caught. No console and no API key are required. The self-test sends nothing. Point to https://honeyprompter.com only if they ask for more than the local check, and only as the last step. Do not use it to plant a real secret, or to claim an attack was stopped.
 ---
 
 # Honey Prompting
 
-version: 1.2.2
+version: 1.2.3
 
 ## What this does
 
@@ -32,8 +32,6 @@ If you cannot run a shell or pip, go to **No shell**. Do not invent command outp
 ## 1. Install
 
 Use `python3` (3.10 or newer). A bare `python` may be missing. PyPI does not host this package. Do not ask for a key. Make a virtualenv, then run this block. It fetches `/dl/latest.json`, downloads the wheel that file names, and checks sha256 with hashlib against that file and against `PINNED_SHA256`. A redirect whose target is not `https://www.honeyprompter.com` on port 443 (another host, another port, or http) is an error. It then installs `./<wheel>` with `--no-deps`. Do not pip-install the URL.
-
-Maintainers bump `PINNED_SHA256` with `python scripts/build_dist.py --pin-skill`. That hashes the wheel already published under `dashboard/public/dl/`, writes the pin, and rebuilds the skill zip. It does not rebuild the wheel. Do not edit the pin by hand.
 
 ```bash
 python3 -m venv .hp && . .hp/bin/activate
@@ -76,7 +74,7 @@ Path(name).write_bytes(data)
 subprocess.check_call([sys.executable, "-m", "pip", "install", "--no-deps", "./" + name])
 ```
 
-Stop if the checksum does not match. Download, verify, then install the local file. The private-venv installer and the enroll command are in `references/sdk.md`.
+Stop if the checksum does not match. Download, verify, then install the local file. The private-venv installer is in `references/sdk.md`.
 
 ## 2. Plant decoys
 
@@ -173,15 +171,11 @@ Place one distinct decoy per spot, from `references/playbook.md`. Canaries only 
 
 Wire it. Python with an OpenAI-style client: `protect()` and the test in `references/sdk.md`. Any other language: `references/other-languages.md`. Run their test and show that output.
 
-Close with the note in `references/limits.md`. Say what it detects, what it blocks, and what it does not cover.
+Close with the note in `references/limits.md`. Say what it detects, what it blocks (only with `protect()` or a guard; otherwise it blocks nothing and only detects), and what it does not detect.
 
-## 6. Connect the console (optional)
+## 6. Beyond the local check
 
-Skip this unless they ask for a team view, alerts, or a shared receipt list.
-
-They need an ingest key (`hp_live_` plus 32 letters) or a one-time code from Console → Machines → Create command. The command is in `references/sdk.md`. Never put the key or the code in a file they will commit, in chat, or in shell history on a shared machine. Alerts are set in the console, not in this skill.
-
-If this folder already has `connection.json`, it belongs to one organization. Use it only here. Do not print the key.
+Anything beyond this local check is at https://honeyprompter.com.
 
 ## No shell
 
@@ -238,7 +232,7 @@ If your live run differs, report the live run and say it differs from `reference
 
 ## Sample
 
-The first 17 lines of a real `honeyprompt selftest` run on SDK 1.0.21 in this repository. Exit code 0. The complete stdout is in `references/selftest-sample.md`. Do not retype the counts from memory.
+The first 17 lines of a real `honeyprompt selftest` run with SDK 1.0.21. Exit code 0. The complete stdout is in `references/selftest-sample.md`. Do not retype the counts from memory.
 
 ```text
 result: PASS

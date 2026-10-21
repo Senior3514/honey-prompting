@@ -34,7 +34,7 @@ export const leaked = (text, decoy) => {
 };
 ```
 
-This covers the common re-encodings. It does not cover ROT13 or a paraphrase; add ROT13 if you care, and accept that a determined attacker can always describe a secret in words (see `limits.md`).
+This snippet catches the whole value as written, in another case, split by spaces or punctuation, reversed, base64, hex, or URL-encoded. It does not catch ROT13, invisible characters or look-alike Unicode, a partial value (a fragment), or a paraphrase. Add ROT13, Unicode normalisation (NFKC plus stripping zero-width characters) and fragment matching if you need them, and accept that a determined attacker can always describe a secret in words (see `limits.md`).
 
 Wrap the call so a hit is handled in one place:
 
