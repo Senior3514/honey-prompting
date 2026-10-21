@@ -36,4 +36,4 @@ The self-test itself uses the `honeyprompts` Python package, downloaded from www
 
 ## License
 
-See `LICENSE`.
+Apache-2.0 (see `LICENSE`). It covers only the skill files in this repository; see `NOTICE`.
