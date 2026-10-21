@@ -6,7 +6,7 @@ Honey Prompting teaches Claude to plant decoys (fake, inert secrets) and canarie
 
 **It detects. It does not prevent.** A decoy that leaks, or a canary that gets obeyed, is evidence that a leak path exists. A quiet result is not proof of safety, and this skill does not replace least privilege, filtering, or human approval of sensitive actions. See `references/limits.md` for what it cannot catch.
 
-No account and no API key are needed. The self-test calls no model and sends nothing. Connecting a HoneyPrompter console is optional.
+No account and no API key are needed. The self-test calls no model and sends nothing.
 
 Anything beyond this local check is at https://honeyprompter.com.
 
