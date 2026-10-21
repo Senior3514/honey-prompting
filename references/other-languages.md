@@ -18,7 +18,7 @@ export const mint = () => ({ id: "aws-1", value: "AKIA-HONEY-" + randomBytes(8).
 
 const forms = (t) => {
   const out = [t, t.toLowerCase(), [...t].reverse().join("")];
-  try { out.push(decodeURIComponent(t)); } catch {}
+  out.push(t.replace(/(?:%[0-9A-Fa-f]{2})+/g, (m) => { try { return decodeURIComponent(m); } catch { return m; } }));
   for (const run of t.match(/[A-Za-z0-9+/_-]{16,}={0,2}/g) ?? []) {
     try { out.push(Buffer.from(run, "base64").toString("utf8")); } catch {}
   }
@@ -34,7 +34,7 @@ export const leaked = (text, decoy) => {
 };
 ```
 
-This snippet catches the whole value as written, in another case, split by spaces or punctuation, reversed, base64, hex, or URL-encoded. It does not catch ROT13, invisible characters or look-alike Unicode, a partial value (a fragment), or a paraphrase. Add ROT13, Unicode normalisation (NFKC plus stripping zero-width characters) and fragment matching if you need them, and accept that a determined attacker can always describe a secret in words (see `limits.md`).
+This snippet catches the whole value as written, in another case, split by spaces or punctuation, reversed, base64, hex, or URL-encoded. It does not catch ROT13, invisible characters or look-alike Unicode, a partial value (a fragment), or a paraphrase. Add ROT13, Unicode normalisation (NFKC plus stripping invisible characters, as `scripts/hp_decoys.py` does) and fragment matching if you need them, and accept that a determined attacker can always describe a secret in words (see `limits.md`).
 
 Wrap the call so a hit is handled in one place:
 

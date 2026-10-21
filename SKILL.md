@@ -11,7 +11,7 @@ version: 1.2.3
 
 Honey Prompting plants fake secrets (decoys) and hidden instructions (canaries) where an agent can see them.
 A leak of a decoy, or an agent that obeys a canary, is evidence. The tripwire detects. It does not prevent.
-This skill does that work on its own: install, plant, run an offline self-attack, and show what was caught. A console is optional.
+This skill does that work on its own: install, plant, run an offline self-attack, and show what was caught.
 
 ## When to use
 
@@ -25,7 +25,7 @@ This skill does that work on its own: install, plant, run an offline self-attack
 - The task is ordinary coding, with no untrusted text and no agent that holds secrets.
 - They want something that prevents attacks. Say what this detects, then stop. Silence is not safety.
 - They ask you to plant a real password, key, or token.
-- They already have tripwires and only want the console. Do step 6 and nothing else.
+- They already have tripwires and only want what is beyond the local check. Do step 6 and nothing else.
 
 If you cannot run a shell or pip, go to **No shell**. Do not invent command output.
 
@@ -163,7 +163,7 @@ These lines are copied from `python3 -m honeyprompts selftest --json` on SDK 1.0
 
 ## 5. Harden
 
-Do this only after a pass (`PASS` in text, `pass` in JSON), and only if they want tripwires in their own system. Still no console.
+Do this only after a pass (`PASS` in text, `pass` in JSON), and only if they want tripwires in their own system.
 
 Map the agent by reading the repo. Write three rows: what untrusted text it reads, what secret-looking material it holds, and where output goes. Name the files. Ask one question only if the code does not say.
 

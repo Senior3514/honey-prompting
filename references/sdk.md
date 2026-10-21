@@ -160,6 +160,6 @@ This runs offline in demo mode. To test your real agent, point the stand-in at t
 
 ## Forms a match finds
 
-The value as written, in another case, with invisible characters or look-alike Unicode, split by spaces or punctuation, reversed, ROT13, base64, hex or URL-encoded. The receipt says how it matched.
+The value as written, in another case, with zero-width characters or look-alike Unicode, split by spaces or punctuation, reversed, ROT13, base64, hex or URL-encoded. The receipt says how it matched.
 
 Anything beyond this local check is at https://honeyprompter.com.

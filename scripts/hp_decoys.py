@@ -12,7 +12,9 @@ Decoys look like secrets but authenticate nowhere. Keep the decoys file private:
 attacker knows is a decoy they can avoid.
 
 What the scan catches: the value as written, in another case, split by spaces, punctuation or
-invisible characters, in full-width or other NFKC look-alike Unicode, reversed, ROT13, base64,
+invisible characters (every Unicode format character, such as zero-width spaces, bidi controls
+and tag characters, plus the combining grapheme joiner, the Mongolian vowel separator and
+variation selectors), in full-width or other NFKC look-alike Unicode, reversed, ROT13, base64,
 hex or URL-encoded, and any contiguous run of at least 12 characters
 from the value (including that run in base64, hex, or URL-encoding). What it cannot catch: a
 paraphrase, a translation, a value spelled out in words, or a piece shorter than 12 characters.
@@ -44,7 +46,15 @@ MAX_CHARS = 200_000
 MIN_FRAGMENT_LEN = 12
 _B64 = re.compile(r"[A-Za-z0-9+/_-]{16,}={0,2}")
 _HEX = re.compile(r"(?:[0-9a-fA-F]{2}){12,}")
-_INVISIBLE = dict.fromkeys(map(ord, "​‌‍‎‏⁠­﻿"), None)
+# Invisible characters: every Unicode format character (category Cf: zero-width spaces and
+# joiners, bidi controls and isolates, invisible operators, soft hyphen, BOM, tag characters
+# U+E0000-E007F), plus the combining grapheme joiner U+034F, the Mongolian vowel separator
+# U+180E and the variation selectors U+FE00-FE0F.
+_INVISIBLE_EXTRA = frozenset([0x034F, 0x180E, *range(0xFE00, 0xFE10)])
+
+
+def _invisible(c: str) -> bool:
+    return ord(c) in _INVISIBLE_EXTRA or unicodedata.category(c) == "Cf"
 _SQUASH = re.compile(r"[\s*`'\"_.\-|,;:]+")
 
 
@@ -53,8 +63,13 @@ def mint(count: int = 3) -> list[dict]:
     return [{"id": f"{k}-{i + 1}", "kind": k, "value": KINDS[k]()} for i, k in enumerate((kinds * count)[:count])]
 
 
+def _strip_invisible(text: str) -> str:
+    return "".join(c for c in text if not _invisible(c))
+
+
 def _norm(text: str) -> str:
-    return unicodedata.normalize("NFKC", text).translate(_INVISIBLE)
+    # Strip before NFKC (a joiner can block composition) and after (in case NFKC yields one).
+    return _strip_invisible(unicodedata.normalize("NFKC", _strip_invisible(text)))
 
 
 def _squash(text: str) -> str:
@@ -173,6 +188,13 @@ def _selftest() -> int:
         "fragment": f"prefix {v[:12]} only",
         "fragment-b64": base64.b64encode(v[:16].encode()).decode(),
         "zero-width-split": "\u200b".join(v),
+        "invisible-u2063": "\u2063".join(v),
+        "invisible-u180e": "\u180e".join(v),
+        "invisible-u202e": "\u202e".join(v),
+        "invisible-u2066": "\u2066".join(v),
+        "invisible-u034f": "\u034f".join(v),
+        "invisible-ufe0f": "\ufe0f".join(v),
+        "invisible-tag": "\U000e0041".join(v),
         "full-width": "".join(chr(ord(c) + 0xFEE0) if 0x21 <= ord(c) <= 0x7E else c for c in v),
     }
     bad = []

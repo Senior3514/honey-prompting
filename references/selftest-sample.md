@@ -1,6 +1,7 @@
 # Self-test sample (SDK 1.0.21)
 
-This is the complete stdout of `python -m honeyprompts selftest` from this repository, package 1.0.21. The process exited 0. Nothing below was typed by hand. Quote it. Do not change a count.
+This is the complete stdout of `python -m honeyprompts selftest`, package 1.0.21.
+The process exited 0. Nothing below was typed by hand. Quote it. Do not change a count.
 
 A second invocation, `python3 -m honeyprompts selftest --json`, exited 0. `result` is the lowercase string `pass` (a failure is `fail`, which is the same stop rule as text `FAIL`). Under `summary`: the counts, `missed_ids`, `unexpected_ids`, `known_gap_ids`, and `control_ids`. Top-level `attacks` is a list of 55 rows, not a number. `summary.attacks` is 55, `summary.caught` is 46, and `summary.unexpected` is 0, so there were 0 false alarms. The 9 not-caught rows are 7 controls and 2 known gaps. `input` strings are masked with `<id>`. Those masked strings are the same on every run and match the text below.
 
